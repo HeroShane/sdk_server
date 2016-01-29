@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <h3> iframe ... 123 </h3>
+
+  <script type="text/javascript" src="http://localhost:8000/js/jquery-2.2.0.min.js"></script>
+  <script type="text/javascript" src="http://localhost:8000/js/easyXDM.min.js"></script>
+  <script >
+    function apiRequest(endpoint, params, callback) {
+        var options = {
+            url:      'http://ad.xrk.com/api/v1/ads/iframe/image_simple' ,
+            data:     params,
+            type:     'POST',
+            complete: complete,
+            headers:  {
+                'Xrkad-Request-Origin': rpc.origin,
+                'Xrkad-Request-Token': params.token
+            }
+        };
+
+        function complete(xhr) {
+            var response = {};
+
+            if ([200, 201].indexOf(xhr.status)){
+              response.data = xhr.responseJSON;
+            }else{
+              console.info("request server api fail")
+              response.error = xhr.responseText;
+            }
+            callback(response);
+        }
+        jQuery.ajax(options);
+    }
+
+    var rpc = new easyXDM.Rpc({}, {
+        local: {
+            apiRequest: apiRequest
+        }
+    });
+
+
+  </script>
+
+</body>
+</html>
